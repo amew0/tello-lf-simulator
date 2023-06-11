@@ -7,9 +7,10 @@ from QRcodeFunc import *
 global me
 me = TelloSimulator()
 
-me.connect()
+me.connect(path_image_loc="path_3.png")
 me.get_battery()
 me.streamon()
+me.sensitivity = 2
 
 clock = pygame.time.Clock()
 

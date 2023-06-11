@@ -116,12 +116,15 @@ class TelloSimulator:
         '''
     def send_rc_control(self,a:int, b:int, c:int, d:int):
         a *= -1 # because Tello() is oriented that way
-
+        if not self.tookoff:
+            # the drone has not yet taken off, so increasing sensitivity to make it easier for navigation
+            self.lr += a*self.sensitivity*10
+            self.fb += b*self.sensitivity*10
         self.lr += a*self.sensitivity
         self.fb += b*self.sensitivity
         self.ud += c*self.sensitivity*0.05
         self.yv += d
-
+        # print(self.lr, self.fb, self.ud, self.yv)
         if (self.ud <= -0.99): self.ud = -0.99
 
         # print(f"Sending {a} - {b} - {c} - {d}")
@@ -140,11 +143,13 @@ class TelloSimulator:
         
            
         pygame.display.flip()
-        return image_under 
+        return image_under
        
     def take_off(self):
-        self.tookoff = True
-        print("Taking off...")
+        if not self.tookoff:
+            self.tookoff = True
+
+            print("Taking off...")
     
     def land(self):
         if self.tookoff:
